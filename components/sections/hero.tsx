@@ -227,12 +227,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div custom={3} variants={fadeUpVariants} initial="hidden" animate="visible">
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-gradient-to-r from-indigo-500 to-rose-500 text-white font-medium transition-transform hover:scale-105"
-            >
-              View My Work
-            </a>
+           
           </motion.div>
         </div>
       </div>

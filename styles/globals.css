@@ -104,3 +104,30 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .timeline-dot {
+    transition: all 0.3s ease;
+  }
+
+  .timeline-dot.active {
+    @apply border-indigo-400;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2),
+                0 0 0 4px rgba(99, 102, 241, 0.1),
+                0 0 15px rgba(99, 102, 241, 0.5);
+  }
+
+  .timeline-dot.active::before {
+    opacity: 1;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

@@ -155,17 +155,22 @@ export default function Experience() {
           <div 
             ref={timelineRef}
             className={`
-              absolute top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500
-              ${isMobile ? 'left-4' : 'left-1/2'}
+              absolute top-0 bottom-0 w-0.5 
+              ${isMobile ? 'left-6' : 'left-1/2 -translate-x-px'}
+              before:absolute before:inset-0 before:blur-sm before:bg-gradient-to-b 
+              before:from-indigo-500 before:via-purple-500 before:to-pink-500
+              after:absolute after:inset-0 after:blur-md after:bg-gradient-to-b 
+              after:from-indigo-500/50 after:via-purple-500/50 after:to-pink-500/50
             `}
             style={{ 
               transform: 'scaleY(0)',
-              transformOrigin: 'top'
+              transformOrigin: 'top',
+              background: 'linear-gradient(to bottom, rgb(99 102 241), rgb(168 85 247), rgb(236 72 153))'
             }}
           />
 
           {/* Experience cards */}
-          <div className="relative space-y-12 md:space-y-24">
+          <div className="relative space-y-12 md:space-y-24 pr-4">
             {experiences.map((experience, index) => (
               <div
                 key={index}
@@ -185,14 +190,18 @@ export default function Experience() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.2, type: 'spring' }}
                   className={`
-                    absolute w-4 h-4 rounded-full bg-indigo-500 
-                    shadow-lg shadow-indigo-500/50 z-10 
-                    border-2 border-[#030303] timeline-dot
-                    ${isMobile 
-                      ? 'left-4 top-0' 
-                      : 'left-1/2 top-6'
-                    }
-                    -translate-x-1/2
+                    timeline-dot
+                    
+                    absolute w-4 h-4 rounded-full 
+                    ${isMobile ? 'left-4' : 'left-1/2'}
+                    -translate-x-1/2 z-20
+                    bg-[#030303] border-2 border-indigo-500
+                    before:absolute before:inset-[-2px] before:rounded-full
+                    before:bg-gradient-to-r before:from-indigo-500 before:to-purple-500
+                    before:opacity-0 before:transition-opacity before:duration-300
+                    after:absolute after:inset-[-4px] after:rounded-full
+                    after:bg-indigo-500/20 after:opacity-0 after:transition-opacity
+                    group-hover:before:opacity-100 group-hover:after:opacity-100
                   `}
                 />
 

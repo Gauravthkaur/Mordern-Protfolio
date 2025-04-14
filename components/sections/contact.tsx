@@ -1,13 +1,15 @@
 "use client"
 
-import type React from "react"
-
 import { useEffect, useRef, useState } from "react"
 import { Mail, MapPin, Phone, Send } from "lucide-react"
-
-// Import only what we need from gsap
+import emailjs from '@emailjs/browser'
 import { gsap } from "gsap/dist/gsap"
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
+
+// Replace these with your actual EmailJS credentials
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID"
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -115,22 +117,40 @@ export default function Contact() {
     setIsSubmitting(true)
 
     try {
-      // Simulate form submission
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      
-      setIsSubmitted(true)
-      setFormState({ name: "", email: "", message: "" })
-      
-      // Reset form submission status after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false)
-      }, 5000)
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formState.name,
+          from_email: formState.email,
+          message: formState.message,
+        },
+        EMAILJS_PUBLIC_KEY
+      )
+
+      if (result.text === "OK") {
+        setIsSubmitted(true)
+        setFormState({ name: "", email: "", message: "" })
+        
+        // Reset form submission status after 5 seconds
+        setTimeout(() => {
+          setIsSubmitted(false)
+        }, 5000)
+      } else {
+        throw new Error("Failed to send message")
+      }
     } catch (error) {
       console.error("Form submission error:", error)
+      alert("Failed to send message. Please try again later.")
     } finally {
       setIsSubmitting(false)
     }
   }
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(EMAILJS_PUBLIC_KEY)
+  }, [])
 
   return (
     <section id="contact" ref={sectionRef} className="relative py-16 md:py-20 bg-[#030303]">
