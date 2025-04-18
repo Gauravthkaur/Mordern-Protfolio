@@ -35,9 +35,13 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
       gestureOrientation: "vertical",
       wheelMultiplier: 1,
       smoothWheel: true,
-      smoothTouch: false, // Disable smooth touch for better native feel on mobile
+      touchInertiaMultiplier: 2, // Adjust touch inertia for better mobile experience
       touchMultiplier: 2,
       infinite: false,
+      smoothTouch: true,
+      smooth: true,
+      smoothTouchThreshold: 0,
+      touchpadSupport: true,
     });
 
     // Integrate Lenis with GSAP ScrollTrigger
