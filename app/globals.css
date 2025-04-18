@@ -167,10 +167,17 @@ body {
   transform-style: preserve-3d;
 }
 
-/* Fixes:
+html, body {
+  /* Ensure the main document can scroll vertically */
+  overflow-x: hidden; /* Prevent horizontal scroll on body */
+  overflow-y: auto;   /* Allow vertical scroll */
+  height: 100%;       /* Ensure body takes full height */
+}
 
-### 1. For the Projects section, add these styles to your globals.css:
-```css
+body {
+  position: relative; /* Needed for some Lenis calculations */
+}
+
 /* Custom cursor hover effect */
 .cursor-hover {
   transform: scale(1.5) !important;
