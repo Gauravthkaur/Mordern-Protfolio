@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+// Import the context hook
+import { useSmoothScrollContext } from "@/lib/smooth-scroll"
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -16,6 +18,8 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // Get the scrollTo function from the context
+  const { scrollTo } = useSmoothScrollContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +29,13 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    // Use the scrollTo function from the context
+    scrollTo(href); // Using default options from context
+    setMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -40,8 +51,9 @@ export default function Navbar() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between">
             <a
-              href="#"
-              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-rose-300"
+              href="#home" // Point to home section
+              onClick={(e) => handleNavClick(e, "#home")} // Add click handler
+              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-rose-300 cursor-pointer" // Add cursor-pointer
             >
               Portfolio
             </a>
@@ -51,6 +63,7 @@ export default function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className="text-white/70 hover:text-white transition-colors duration-200"
                 >
                   {link.name}
@@ -58,48 +71,62 @@ export default function Navbar() {
               ))}
             </nav>
 
-            <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(true)}>
+            <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
               <Menu size={24} />
             </button>
           </div>
         </div>
       </motion.header>
 
+      {/* Mobile Menu - Refined Structure */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-50 bg-[#030303]/95 backdrop-blur-lg md:hidden"
+            key="mobile-menu" // Add key for AnimatePresence reliability
+            className="fixed inset-0 z-[100] bg-[#030303]/95 backdrop-blur-lg md:hidden overflow-y-auto" // Ensure vertical scroll
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            <div className="flex flex-col h-full">
-              <div className="flex justify-end p-4">
-                <button onClick={() => setMobileMenuOpen(false)} className="text-white">
-                  <X size={24} />
-                </button>
-              </div>
-
-              <nav className="flex flex-col items-center justify-center flex-1 space-y-8 mt-12">
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    className="text-xl text-white/70 hover:text-white transition-colors duration-200"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: 20, opacity: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.name}
-                  </motion.a>
-                ))}
-              </nav>
+            {/* Top bar with logo and close button */}
+            <div className="flex justify-between items-center p-5 border-b border-white/10"> {/* Added bottom border */}
+              <a
+                href="#home"
+                onClick={(e) => handleNavClick(e, "#home")}
+                className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-rose-300"
+              >
+                Portfolio
+              </a>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-white p-2 rounded-full hover:bg-white/10 transition-colors" // Improved tappable area
+                aria-label="Close menu"
+              >
+                <X size={24} />
+              </button>
             </div>
+
+            {/* Navigation Links - Simplified Layout */}
+            <nav className="flex flex-col items-center space-y-4 p-5 pt-8"> {/* Adjusted padding and removed flex-1/justify-center */}
+              {navLinks.map((link, index) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  // Explicitly set text color and ensure block display
+                  className="block w-full text-center text-xl py-3 px-4 text-white hover:bg-white/10 rounded-md transition-colors duration-200"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }

@@ -21,7 +21,7 @@ const experiences = [
       "Achieved WCAG 2.1 compliance"
     ],
     skills: ["React", "React Router", "CSS Modules", "Accessibility", "SEO"],
-    url: "https://samagam.rifmjpru.com/"
+    url: "https://samagam-landing-page.vercel.app/"
   },
   {
     title: "Android Development Intern",
@@ -61,13 +61,13 @@ export default function Experience() {
           },
           {
             scaleY: 1,
-            duration: 1.5,
-            ease: "power3.inOut",
+            duration: 1, // Reduced from 1.5
+            ease: "power2.inOut", // Changed from power3
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 80%",
-              end: "bottom 20%",
-              scrub: 1,
+              start: "top 85%", // Adjusted trigger point
+              end: "bottom 15%",
+              scrub: 0.8, // Reduced from 1.5
               onUpdate: (self) => {
                 const progress = self.progress;
                 const dots = document.querySelectorAll('.timeline-dot');
@@ -117,16 +117,13 @@ export default function Experience() {
     <section
       ref={sectionRef}
       id="experience"
+      // Unified background color with Skills section
       className="relative py-20 lg:py-32 bg-[#030303] overflow-hidden"
     >
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 opacity-20">
+      {/* Remove or soften the animated gradient background for seamless blend */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div 
-          className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 via-purple-500/20 to-pink-500/20"
-          style={{
-            maskImage: 'radial-gradient(circle at center, transparent 0%, black 100%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, black 100%)'
-          }}
+          className="absolute inset-0 bg-[#030303]" // Use same solid bg as Skills
         />
       </div>
 
@@ -174,7 +171,7 @@ export default function Experience() {
             {experiences.map((experience, index) => (
               <div
                 key={index}
-                ref={el => cardRefs.current[index] = el}
+                ref={(el: HTMLDivElement | null) => { cardRefs.current[index] = el }}
                 className={`
                   relative flex items-start
                   ${isMobile 
@@ -288,8 +285,8 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Bottom decorative elements */}
-      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+      {/* Bottom decorative element: fade it out for seamless blend */}
+      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/10 to-transparent pointer-events-none" />
     </section>
   )
 }

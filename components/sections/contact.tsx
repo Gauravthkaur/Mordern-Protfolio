@@ -7,9 +7,9 @@ import { gsap } from "gsap/dist/gsap"
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
 
 // Replace these with your actual EmailJS credentials
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID"
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"
+const EMAILJS_SERVICE_ID = "service_69ack9p"
+const EMAILJS_TEMPLATE_ID = "template_9su4hiy"
+const EMAILJS_PUBLIC_KEY = "61L9jgIKZHwYDmVnm"
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -174,7 +174,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2 text-white">Location</h3>
-                <p className="text-sm sm:text-base text-gray-400">San Francisco, CA, United States</p>
+                <p className="text-sm sm:text-base text-gray-400">Bareilly Uttar Pradesh</p>
               </div>
             </div>
 
@@ -184,7 +184,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2 text-white">Email</h3>
-                <p className="text-sm sm:text-base text-gray-400">hello@example.com</p>
+                <p className="text-sm sm:text-base text-gray-400">gaurav079t@gmail.com</p>
               </div>
             </div>
 
@@ -194,7 +194,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2 text-white">Phone</h3>
-                <p className="text-sm sm:text-base text-gray-400">+1 (555) 123-4567</p>
+                <p className="text-sm sm:text-base text-gray-400">+91 8395858165</p>
               </div>
             </div>
 
@@ -208,23 +208,11 @@ export default function Contact() {
               </p>
               <div className="flex flex-wrap gap-3">
                 {/* Social media icons */}
+
                 <a
-                  href="#"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500 hover:bg-indigo-500 hover:text-white transition-colors"
-                  aria-label="Facebook"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
-                  </svg>
-                </a>
-                <a
-                  href="#"
+                  href="https://x.com/gauravThakur_2"
+                  target="_blank" // Add target="_blank"
+                  rel="noopener noreferrer" // Add rel attribute
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500 hover:bg-indigo-500 hover:text-white transition-colors"
                   aria-label="Twitter"
                 >
@@ -239,7 +227,9 @@ export default function Contact() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/gauravkumar-dev" // Corrected LinkedIn URL
+                  target="_blank" // Add target="_blank"
+                  rel="noopener noreferrer" // Add rel attribute
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500 hover:bg-indigo-500 hover:text-white transition-colors"
                   aria-label="LinkedIn"
                 >
@@ -254,7 +244,9 @@ export default function Contact() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/Gauravthkaur"
+                  target="_blank" // Add target="_blank"
+                  rel="noopener noreferrer" // Add rel attribute
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500 hover:bg-indigo-500 hover:text-white transition-colors"
                   aria-label="GitHub"
                 >

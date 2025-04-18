@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import CustomCursor from "@/components/cursor"
+// Import the provider from the components directory
+import { SmoothScrollProvider } from "@/components/smooth-scroll-provider"
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -9,13 +11,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        {children}
+        {/* Use the SmoothScrollProvider here */}
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
         <CustomCursor />
       </body>
     </html>

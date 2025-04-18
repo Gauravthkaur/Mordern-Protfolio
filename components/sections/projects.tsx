@@ -1,301 +1,231 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import Image from "next/image"
 import { ExternalLink, Github } from "lucide-react"
-
-// Import only what's needed from gsap for better performance
-import { gsap } from "gsap/dist/gsap"
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 
 const projects = [
+
   {
-    title: "E-Commerce Platform",
-    description:
-      "A full-stack e-commerce solution with product management, cart functionality, and payment processing.",
-    image: "/placeholder.svg?height=600&width=800",
-    tags: ["Next.js", "Tailwind CSS", "Stripe", "MongoDB"],
-    github: "#",
-    demo: "#",
-  },
+    id: "employee-management-system",
+    title: "Employee Management System",
+    description: "A web-based system for managing employee details, roles, and performance.",
+    image: "/employeeManagemnt.png",
+    tags: ["JavaScript", "HTML", "CSS"],
+    github: "https://github.com/Gauravthkaur/Employee-Management-System",
+    demo: "https://employee-management-system-theta-lac.vercel.app/"
+},
+
   {
-    title: "Portfolio Website",
-    description: "A responsive portfolio website with advanced animations and interactive elements.",
-    image: "/placeholder.svg?height=600&width=800",
-    tags: ["React", "GSAP", "Framer Motion", "Tailwind CSS"],
-    github: "#",
-    demo: "#",
-  },
-  {
+    id: "User_Management_System",
     title: "Task Management App",
-    description: "A collaborative task management application with real-time updates and team collaboration features.",
-    image: "/placeholder.svg?height=600&width=800",
+    description: "A collaborative task management application with real-time updates.",
+    image: "/user management.png",
     tags: ["React", "Firebase", "Redux", "Material UI"],
-    github: "#",
-    demo: "#",
+    github: "https://github.com/Gauravthkaur/User-Management-System",
+    demo: "https://user-management-system-delta.vercel.app/",
   },
   {
+    id: "weather-dashboard",
     title: "Weather Dashboard",
-    description: "An interactive weather dashboard with location-based forecasts and historical data visualization.",
-    image: "/placeholder.svg?height=600&width=800",
+    description: "An interactive weather dashboard with location-based forecasts.",
+    image: "/weather.png",
     tags: ["JavaScript", "Chart.js", "Weather API", "CSS"],
-    github: "#",
-    demo: "#",
+    github: "https://github.com/Gauravthkaur/weather_app",
+    demo: "https://weather-app-seven-psi-53.vercel.app/",
   },
-]
+    {
+      id: "samagam-landing-page",
+      title: "Samagam Landing Page",
+      description: "A responsive landing page for Samagam with a visually appealing design.",
+      image: "/landing Page.png",
+      tags: ["JavaScript", "CSS", "HTML"],
+      github: "https://github.com/Gauravthkaur/Samagam-LandingPage",
+      demo: "https://samagam-landing-page.vercel.app/"
+  },
+  {
+    id: "mental-health-bot",
+    title: "Mental Health Bot",
+    description: "AI-powered mental health companion providing empathetic responses and personalized recommendations for anxiety, depression, and stress.",
+    image: "/bot.png",
+    tags: ["Python", "JavaScript", "CSS", "Shell", "HTML"],
+    github: "https://github.com/Gauravthkaur/Mental-Health-bot",
+    demo: "https://mental-health-bot-two.vercel.app/"
+},
+{
+  id: "modern-responsive-site",
+  title: "Modern Responsive Site",
+  description: "A modern and fully responsive website with clean design and layout.",
+  image: "/modern site.png",
+  tags: ["HTML", "CSS", "JavaScript"],
+  github: "https://github.com/Gauravthkaur/Mordern_responsive_site",
+  demo: "https://mordern-responsive-site.vercel.app/"
+}
+  // Add more projects if needed
+];
+
+const sectionVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
 
 export default function Projects() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const descRef = useRef<HTMLParagraphElement>(null)
-  const projectsContainerRef = useRef<HTMLDivElement>(null)
-  const projectRefs = useRef<(HTMLDivElement | null)[]>([])
-  const [isInView, setIsInView] = useState(false)
-  const [activeProject, setActiveProject] = useState(-1)
+  const sectionRef = useRef<HTMLElement>(null);
 
-  // Initialize ScrollTrigger only on client side
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    
-    gsap.registerPlugin(ScrollTrigger)
-    
-    // Create an intersection observer for the section
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
+  // Parallax scroll progress for the section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
+  // Parallax transforms for background elements
+  const bg1Y = useSpring(useTransform(scrollYProgress, [0, 1], [0, 100]), { stiffness: 40, damping: 20 });
+  const bg2Y = useSpring(useTransform(scrollYProgress, [0, 1], [0, -80]), { stiffness: 40, damping: 20 });
+  const geo1X = useSpring(useTransform(scrollYProgress, [0, 1], [0, 60]), { stiffness: 40, damping: 20 });
+  const geo2X = useSpring(useTransform(scrollYProgress, [0, 1], [0, -40]), { stiffness: 40, damping: 20 });
 
-    // Initialize header animations
-    if (titleRef.current && descRef.current) {
-      // Set initial state to ensure elements are visible by default with fallback
-      gsap.set([titleRef.current, descRef.current], { opacity: 0.01 })
-      
-      // Create title reveal animation
-      gsap.fromTo(
-        titleRef.current,
-        { clipPath: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)" },
-        {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          opacity: 1,
-          duration: 1.2,
-          ease: "power3.inOut",
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: "top 80%",
-            once: true,
-          }
-        }
-      )
-      
-      // Create description reveal animation with a slight delay
-      gsap.to(descRef.current, {
-        opacity: 1,
-        duration: 1,
-        delay: 0.4,
-        scrollTrigger: {
-          trigger: descRef.current,
-          start: "top 80%",
-          once: true,
-        }
-      })
-    }
-
-    // Create staggered project card reveal animations
-    if (projectsContainerRef.current) {
-      // Create a timeline for project animations
-      const projectTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: projectsContainerRef.current,
-          start: "top 70%",
-          once: true,
-        }
-      })
-
-      // Add each project to the timeline with staggered effects
-      projectRefs.current.forEach((project, index) => {
-        if (project) {
-          projectTimeline.fromTo(
-            project,
-            {
-              y: 50,
-              opacity: 0,
-              rotateY: -5,
-              scale: 0.95,
-            },
-            {
-              y: 0,
-              opacity: 1,
-              rotateY: 0,
-              scale: 1,
-              duration: 0.8,
-              ease: "power3.out",
-            },
-            index * 0.15 // Stagger time
-          )
-        }
-      })
-    }
-
-    return () => {
-      observer.disconnect()
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
-    }
-  }, [])
-
-  // Handle hover state for projects (performance optimization)
-  const handleProjectHover = (index: number) => {
-    setActiveProject(index)
-  }
-
-  const handleProjectLeave = () => {
-    setActiveProject(-1)
-  }
+  // Parallax for cards (each card gets a slightly different effect)
+  const getCardParallax = (idx: number) =>
+    useSpring(useTransform(scrollYProgress, [0, 1], [0, (idx % 2 === 0 ? -30 : 30)]), { stiffness: 50, damping: 20 });
 
   return (
-    <section 
-      id="projects" 
-      ref={sectionRef} 
-      className="relative py-16 sm:py-20 md:py-24 bg-[#030303] overflow-hidden"
+    <motion.section
+      ref={sectionRef}
+      id="projects"
+      className="relative py-24 md:py-32 bg-[#030303] overflow-hidden"
+      variants={sectionVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
     >
-      {/* Dynamic background effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-rose-500/[0.03] pointer-events-none">
-        {/* Floating particles */}
-        <div className="absolute top-20 left-1/4 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl animate-float-slow"></div>
-        <div className="absolute bottom-20 right-1/4 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-violet-500/10 rounded-full blur-3xl animate-float-fast"></div>
-      </div>
+      {/* Parallax Background Gradients */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ zIndex: 0 }}
+      >
+        <motion.div
+          className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-radial from-indigo-900/30 to-transparent blur-3xl"
+          style={{ y: bg1Y }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-radial from-rose-900/30 to-transparent blur-3xl"
+          style={{ y: bg2Y }}
+        />
+        {/* Parallax geometric shapes */}
+        <motion.div
+          className="absolute top-10 left-1/4 w-32 h-32 bg-indigo-400/10 rounded-full blur-2xl"
+          style={{ x: geo1X }}
+        />
+        <motion.div
+          className="absolute bottom-10 right-1/4 w-40 h-40 bg-rose-400/10 rounded-full blur-2xl"
+          style={{ x: geo2X }}
+        />
+      </motion.div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 
-            ref={titleRef}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-rose-300 opacity-0"
-          >
-            Featured Projects
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <motion.div variants={itemVariants} className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-rose-300">
+            My Creations
           </h2>
-          <p 
-            ref={descRef}
-            className="text-white/60 max-w-2xl mx-auto text-sm sm:text-base opacity-0"
-          >
-            A selection of my recent work showcasing my skills and expertise
+          <p className="text-white/60 max-w-2xl mx-auto text-sm sm:text-base">
+            Here's a glimpse into projects I've brought to life.
           </p>
-        </div>
+        </motion.div>
 
-        <div 
-          ref={projectsContainerRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10"
+        {/* Projects Grid */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
+          variants={sectionVariants}
         >
-          {projects.map((project, index) => (
-            <div 
-              key={index} 
-              ref={(el: HTMLDivElement | null): void => {
-                projectRefs.current[index] = el;
-              }}
-              onMouseEnter={() => handleProjectHover(index)}
-              onMouseLeave={handleProjectLeave}
-              className={`opacity-0 transition-all duration-300 transform ${
-                isInView ? 'translate-y-0' : 'translate-y-12'
-              }`}
-            >
-              <div 
-                className={`bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden transition-all duration-500 h-full shadow-lg hover:border-white/20 hover:shadow-indigo-500/20 ${
-                  activeProject === index ? 'scale-[1.02] -translate-y-2' : ''
-                }`}
+          {projects.map((project, index) => {
+            const cardY = getCardParallax(index);
+            return (
+              <motion.div
+                key={project.id}
+                variants={itemVariants}
+                style={{ y: cardY }}
+                className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:border-white/20 hover:shadow-indigo-500/10 hover:-translate-y-1 flex flex-col"
               >
-                <div className="relative h-[180px] sm:h-[220px] overflow-hidden group">
+                {/* Image Container */}
+                <div className="relative aspect-video overflow-hidden group">
                   <Image
                     src={project.image || "/placeholder.svg"}
                     alt={project.title}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className={`object-cover transition-transform duration-700 ${
-                      activeProject === index ? 'scale-110' : 'group-hover:scale-105'
-                    }`}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    priority={index < 3}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030303] to-transparent opacity-70"></div>
-                  
-                  {/* Action buttons with improved visibility and accessibility */}
-                  <div className="absolute top-4 right-4 flex space-x-2 transition-all duration-300 transform origin-top-right">
-                    <a
-                      href={project.github}
-                      className="bg-black/40 backdrop-blur-md p-2 rounded-full hover:bg-indigo-600/80 transition-colors"
-                      aria-label="View code on GitHub"
-                    >
-                      <Github size={16} className="text-white" />
-                    </a>
-                    <a
-                      href={project.demo}
-                      className="bg-black/40 backdrop-blur-md p-2 rounded-full hover:bg-indigo-600/80 transition-colors"
-                      aria-label="View live demo"
-                    >
-                      <ExternalLink size={16} className="text-white" />
-                    </a>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
+                  <div className="absolute top-3 right-3 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {project.github && project.github !== "#" && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-black/50 backdrop-blur-sm p-2 rounded-full text-white hover:bg-indigo-600/80 transition-colors"
+                        aria-label="View code on GitHub"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Github size={16} />
+                      </a>
+                    )}
+                    {project.demo && project.demo !== "#" && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-black/50 backdrop-blur-sm p-2 rounded-full text-white hover:bg-rose-600/80 transition-colors"
+                        aria-label="View live demo"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink size={16} />
+                      </a>
+                    )}
                   </div>
                 </div>
-                
-                <div className="p-5 sm:p-6">
-                  <h3 className="text-lg sm:text-xl font-semibold mb-2 text-white group-hover:text-indigo-300 transition-colors">
+                <div className="p-5 sm:p-6 flex flex-col flex-grow">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2 text-white">
                     {project.title}
                   </h3>
-                  <p className="text-white/50 text-sm mb-4 line-clamp-2">
+                  <p className="text-white/60 text-sm mb-4 line-clamp-3 flex-grow">
                     {project.description}
                   </p>
-
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {project.tags.map((tag, tagIndex) => (
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {project.tags.map((tag) => (
                       <span
-                        key={tagIndex}
-                        className="text-xs px-2 py-1 rounded-full bg-white/[0.05] text-white/70 hover:bg-indigo-500/20 hover:text-white/90 transition-colors"
+                        key={tag}
+                        className="text-xs px-2 py-1 rounded-full bg-white/[0.05] text-indigo-300/80"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
-      
-      {/* Visual connector with pulse animation */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-        <div className="w-px h-16 bg-gradient-to-b from-transparent to-indigo-500/40"></div>
-        <div className="w-3 h-3 rounded-full bg-indigo-500/60 absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
-      </div>
-
-      {/* Add these animation classes to your global CSS */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes float-fast {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
-        }
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-        .animate-float-slow {
-          animation: float-slow 12s ease-in-out infinite;
-        }
-        .animate-float-fast {
-          animation: float-fast 6s ease-in-out infinite;
-        }
-      `}</style>
-    </section>
-  )
+    </motion.section>
+  );
 }

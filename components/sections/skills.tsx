@@ -6,35 +6,38 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { 
   FaReact, 
-  FaNodeJs, 
-  FaVuejs, 
-  FaAngular 
+  FaNodeJs,  
+  FaJava,
+
 } from "react-icons/fa"
 import { 
   SiNextdotjs, 
-  SiTypescript, 
+  SiJavascript, 
   SiMongodb, 
   SiGraphql,
-  SiSvelte,
-  SiRemix,
+  SiExpress,
   SiTailwindcss,
-  SiThreedotjs
+  SiThreedotjs,
+  SiJsonwebtokens,
+  SiFlutter
+  
 } from "react-icons/si"
 
 // Define the skills with their icons
 const skills = [
   { name: "React", icon: FaReact },
   { name: "Next.js", icon: SiNextdotjs },
-  { name: "TypeScript", icon: SiTypescript },
+  { name: "JavaScript", icon: SiJavascript },
   { name: "Node.js", icon: FaNodeJs },
   { name: "MongoDB", icon: SiMongodb },
   { name: "GraphQL", icon: SiGraphql },
-  { name: "Vue", icon: FaVuejs },
-  { name: "Svelte", icon: SiSvelte },
-  { name: "Remix", icon: SiRemix },
+  { name: "Express", icon: SiExpress },
   { name: "Tailwind CSS", icon: SiTailwindcss },
-  { name: "Angular", icon: FaAngular },
   { name: "Three.js", icon: SiThreedotjs },
+  { name: "Java", icon: FaJava },
+  { name: "JWT", icon: SiJsonwebtokens },
+  { name: "Flutter", icon: SiFlutter },
+
 ]
 
 export default function Skills() {
