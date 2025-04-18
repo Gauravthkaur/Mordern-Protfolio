@@ -55,7 +55,7 @@ export default function Navbar() {
               onClick={(e) => handleNavClick(e, "#home")} // Add click handler
               className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-rose-300 cursor-pointer" // Add cursor-pointer
             >
-              Portfolio
+              Dev-Gaurav
             </a>
 
             <nav className="hidden md:flex items-center space-x-8">

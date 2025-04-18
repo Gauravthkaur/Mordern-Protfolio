@@ -32,11 +32,13 @@ function ElegantShape({
         opacity: 0,
         y: -150,
         rotate: rotate - 15,
+        scale: 0.8,
       }}
       animate={{
         opacity: 1,
         y: 0,
         rotate: rotate,
+        scale: 1,
       }}
       transition={{
         duration: 2.4,
@@ -49,6 +51,7 @@ function ElegantShape({
       <motion.div
         animate={{
           y: [0, 15, 0],
+          scale: [1, 1.05, 1],
         }}
         transition={{
           duration: 12,
@@ -70,6 +73,7 @@ function ElegantShape({
             "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
             "after:absolute after:inset-0 after:rounded-full",
             "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
+            "hover:shadow-[0_8px_48px_0_rgba(255,255,255,0.2)] transition-shadow duration-300"
           )}
         />
       </motion.div>
@@ -101,15 +105,18 @@ export default function HeroGeometric({
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#030303]">
+      {/* Added layered background gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]" />
 
       <div className="absolute inset-0 overflow-hidden">
+        {/* Updated shape configurations with varied gradients */}
         <ElegantShape
           delay={0.3}
           width={600}
           height={140}
           rotate={12}
-          gradient="from-indigo-500/[0.15]"
+          gradient="from-indigo-400/[0.12] via-purple-500/[0.1] to-transparent"
           className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
         />
 
@@ -118,59 +125,70 @@ export default function HeroGeometric({
           width={500}
           height={120}
           rotate={-15}
-          gradient="from-rose-500/[0.15]"
+          gradient="from-rose-400/[0.15] via-pink-500/[0.1] to-transparent"
           className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
         />
 
-        <ElegantShape
-          delay={0.4}
-          width={300}
-          height={80}
-          rotate={-8}
-          gradient="from-violet-500/[0.15]"
-          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
-        />
-
-        <ElegantShape
-          delay={0.6}
-          width={200}
-          height={60}
-          rotate={20}
-          gradient="from-amber-500/[0.15]"
-          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
-        />
-
-        <ElegantShape
-          delay={0.7}
-          width={150}
-          height={40}
-          rotate={-25}
-          gradient="from-cyan-500/[0.15]"
-          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
-        />
+        {/* Added new floating particles */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white/20 rounded-full"
+              initial={{
+                opacity: 0,
+                scale: 0,
+                x: Math.random() * 100 + '%',
+                y: Math.random() * 100 + '%',
+              }}
+              animate={{
+                opacity: [0, 0.3, 0],
+                scale: [0, 1, 0],
+                x: '+=20%',
+                y: '+=100%',
+              }}
+              transition={{
+                duration: 4 + Math.random() * 4,
+                delay: Math.random() * 2,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="relative z-10 container mx-auto px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center">
+          {/* Enhanced badge with interactive animation */}
           <motion.div
             custom={0}
             variants={fadeUpVariants}
             initial="hidden"
             animate="visible"
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12"
+            whileHover={{
+              scale: 1.05,
+              rotate: 2,
+              background: 'linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 100%)'
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12 backdrop-blur-lg"
           >
             <Image src="https://kokonutui.com/logo.svg" alt="Kokonut UI" width={20} height={20} />
             <span className="text-sm text-white/60 tracking-wide">{badge}</span>
           </motion.div>
 
+          {/* Enhanced title with text shadow and hover effect */}
           <motion.div custom={1} variants={fadeUpVariants} initial="hidden" animate="visible">
-            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">{title1}</span>
+            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-6 md:mb-8 tracking-tighter">
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80 drop-shadow-[0_4px_12px_rgba(165,180,252,0.3)]">
+                {title1}
+              </span>
               <br />
               <span
                 className={cn(
-                  "bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 ",
-                  pacifico.className,
+                  "bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300",
+                  "drop-shadow-[0_4px_24px_rgba(225,29,72,0.3)]",
+                  pacifico.className
                 )}
               >
                 {title2}
@@ -178,15 +196,34 @@ export default function HeroGeometric({
             </h1>
           </motion.div>
 
-          <motion.div custom={2} variants={fadeUpVariants} initial="hidden" animate="visible">
-            <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
+          {/* Enhanced description with animated underline */}
+          <motion.div 
+            custom={2} 
+            variants={fadeUpVariants} 
+            initial="hidden" 
+            animate="visible"
+            className="relative inline-block"
+          >
+            <p className="text-lg sm:text-xl md:text-2xl text-white/50 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
               Crafting exceptional digital experiences through innovative design and cutting-edge technology.
             </p>
+            <motion.div
+              className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1.5, delay: 1.8 }}
+            />
           </motion.div>
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+      {/* Added subtle interactive parallax effect */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
+      />
     </div>
   )
 }

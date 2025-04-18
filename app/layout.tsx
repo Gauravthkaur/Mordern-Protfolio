@@ -1,11 +1,10 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import CustomCursor from "@/components/cursor"
-// Import the provider from the components directory
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider"
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Dev-Gaurav",
   description: "My professional portfolio",
 }
 
@@ -16,8 +15,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Add the favicon link here */}
+        <link rel="icon" href="/Untitled design.png" type="Untitled design.png" />
+      </head>
       <body>
-        {/* Use the SmoothScrollProvider here */}
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>
