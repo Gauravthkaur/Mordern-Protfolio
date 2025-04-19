@@ -19,9 +19,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    unoptimized: true,
-  },
+  // Ensure this 'images' block is removed or commented out
+  // images: {
+  //   unoptimized: true,
+  // },
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
