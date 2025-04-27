@@ -22,6 +22,10 @@ const Experience = dynamic(() => import('@/components/sections/experience'), {
 const Contact = dynamic(() => import('@/components/sections/contact'), {
   loading: () => <LoadingPlaceholder />,
 })
+// Remove the dynamic import for the Resume section
+// const Resume = dynamic(() => import('@/components/sections/resume'), {
+//  loading: () => <LoadingPlaceholder />,
+// })
 const Footer = dynamic(() => import('@/components/sections/footer'), {
   loading: () => <LoadingPlaceholder />, // Footer might load fast, but consistency helps
 })
@@ -37,6 +41,8 @@ export default function Home() {
       <Projects />
       <Experience />
       <Contact />
+      {/* Remove the Resume section rendering */}
+      {/* <Resume /> */}
       <Footer />
     </main>
   )
