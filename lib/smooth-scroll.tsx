@@ -29,14 +29,14 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     gsap.registerPlugin(ScrollTrigger);
 
     const lenisInstance = new Lenis({
-      duration: 1.0, // Adjust duration as needed (e.g., 1.0 seconds)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Standard easing
+      duration: 1.2, // Slightly longer for smoother feel
+      easing: (t) => 1 - Math.pow(1 - t, 3), // Cubic ease-out for smoother deceleration
       orientation: "vertical",
       gestureOrientation: "vertical",
-      wheelMultiplier: 1,
+      wheelMultiplier: 0.85, // Reduced for smoother wheel scrolling
       smoothWheel: true,
-      smoothTouch: true, // <-- Ensure this is set to true
-      touchMultiplier: 2,
+      touchInertiaMultiplier: 1.0, // Use touchInertiaMultiplier instead of smoothTouch for touch smoothing
+      touchMultiplier: 1.5, // Adjusted for better touch response
       infinite: false,
     });
 
@@ -77,7 +77,9 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
 
   return (
     <SmoothScrollContext.Provider value={{ lenis, scrollTo }}>
-      {children}
+      <div className="scroll-content scroll-optimize">
+        {children}
+      </div>
     </SmoothScrollContext.Provider>
   );
 };

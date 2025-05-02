@@ -173,7 +173,7 @@ export default function HeroGeometric({
             }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12 backdrop-blur-lg"
           >
-            <Image src="https://kokonutui.com/logo.svg" alt="Kokonut UI" width={20} height={20} />
+            <Image src="https://kokonutui.com/logo.svg" alt="Kokonut UI" width={20} height={20} loading="lazy" className="img-responsive" />
             <span className="text-sm text-white/60 tracking-wide">{badge}</span>
           </motion.div>
 

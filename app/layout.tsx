@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 import "./globals.css"
-import CustomCursor from "@/components/cursor"
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider"
 // Import the Vercel Analytics component
 import { Analytics } from "@vercel/analytics/react"
+import { cn } from "@/lib/utils"
+
+const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
   title: "Dev-Gaurav",
@@ -22,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <head> is managed by Next.js Metadata API, no need for manual <head> tag here */}
-      <body>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>
-        <CustomCursor />
+        
         {/* Add the Analytics component here */}
         <Analytics />
       </body>

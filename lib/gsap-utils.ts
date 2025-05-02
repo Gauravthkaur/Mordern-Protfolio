@@ -1,10 +1,36 @@
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Make sure to register ScrollTrigger
+// Register GSAP plugins
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger);
 }
+
+// Utility function to apply scroll reveal effect
+export const setupScrollReveal = (selector: string, options = {}) => {
+  if (typeof window === "undefined") return;
+  
+  const elements = document.querySelectorAll(selector);
+  
+  elements.forEach((element) => {
+    // Add the scroll-reveal class
+    element.classList.add('scroll-reveal');
+    
+    // Create ScrollTrigger for each element
+    ScrollTrigger.create({
+      trigger: element,
+      start: "top 85%", // Trigger when element is 85% from the top of viewport
+      once: (options as { once?: boolean })?.once ?? false, // Only trigger once by default
+      onEnter: () => element.classList.add('is-visible'),
+      onLeave: () => !(options as { once?: boolean })?.once && element.classList.remove('is-visible'),
+      onEnterBack: () => !(options as { once?: boolean })?.once && element.classList.add('is-visible'),
+      onLeaveBack: () => !(options as { once?: boolean })?.once && element.classList.remove('is-visible'),
+    });
+  });
+};
+
+// Export for use in components
+export { gsap, ScrollTrigger };
 
 // Helper function to create horizontal scroll sections
 export const createHorizontalScrollSection = (trigger: string | Element, container: string | Element, options = {}) => {

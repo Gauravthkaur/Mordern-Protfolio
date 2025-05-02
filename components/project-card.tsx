@@ -42,9 +42,11 @@ const ProjectCard = React.memo(({ project, style, variants }: ProjectCardProps) 
         <Image
           src={project.image}
           alt={project.title}
-          layout="fill"
-          objectFit="cover"
-          className="transition-transform duration-300 group-hover:scale-105"
+          width={500}
+          height={300}
+          className="rounded-t-lg w-full h-48 object-cover img-responsive hardware-accelerated"
+          loading="lazy"
+          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
       </div>

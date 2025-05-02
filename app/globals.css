@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import optimizations */
+@import "../styles/optimizations.css";
+
 @layer utilities {
   .scrollbar-none {
     -ms-overflow-style: none;
@@ -14,6 +17,11 @@
   /* Add to your existing utilities */
   .smooth-scroll {
     @apply transition-all duration-300 ease-out; /* This might not be needed if Lenis handles transitions */
+  }
+  
+  /* Responsive image utility */
+  .img-responsive {
+    @apply max-w-full h-auto object-cover;
   }
 }
 
