@@ -8,13 +8,23 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 const projects = [
 
   {
-    id: "employee-management-system",
-    title: "Employee Management System",
-    description: "A web-based system for managing employee details, roles, and performance.",
-    image: "/employeeManagemnt.png",
-    tags: ["React.js","JavaScript", "node.js", "TailwindCSS","express.js","mongodb","Rest API","JWT-Authentication"],
-    github: "https://github.com/Gauravthkaur/Employee-Management-System",
-    demo: "https://employee-management-system-theta-lac.vercel.app/"
+    id: "samagam-landing-page",
+      title: "Samagam Landing Page",
+      description: "A responsive landing page for Samagam with a visually appealing design.",
+      image: "/landing Page.png",
+      tags: ["JavaScript", "CSS", "HTML"],
+      github: "https://github.com/Gauravthkaur/Samagam-LandingPage",
+      demo: "https://samagam-landing-page.vercel.app/"
+    
+},
+{
+  id: "employee-management-system",
+title: "Employee Management System",
+description: "A web-based system for managing employee details, roles, and performance.",
+image: "/employeeManagemnt.png",
+tags: ["React.js","JavaScript", "node.js", "TailwindCSS","express.js","mongodb","Rest API","JWT-Authentication"],
+github: "https://github.com/Gauravthkaur/Employee-Management-System",
+demo: "https://employee-management-system-theta-lac.vercel.app/"
 },
 
   {
@@ -26,32 +36,14 @@ const projects = [
     github: "https://github.com/Gauravthkaur/User-Management-System",
     demo: "https://user-management-system-delta.vercel.app/",
   },
-  {
-    id: "weather-dashboard",
-    title: "Weather Dashboard",
-    description: "An interactive weather dashboard with location-based forecasts.",
-    image: "/weather.png",
-    tags: ["JavaScript", "Chart.js", "Weather API", "CSS"],
-    github: "https://github.com/Gauravthkaur/weather_app",
-    demo: "https://weather-app-seven-psi-53.vercel.app/",
-  },
-    {
-      id: "samagam-landing-page",
-      title: "Samagam Landing Page",
-      description: "A responsive landing page for Samagam with a visually appealing design.",
-      image: "/landing Page.png",
-      tags: ["JavaScript", "CSS", "HTML"],
-      github: "https://github.com/Gauravthkaur/Samagam-LandingPage",
-      demo: "https://samagam-landing-page.vercel.app/"
-  },
-  {
+ {
     id: "mental-health-bot",
     title: "Mental Health Bot",
     description: "AI-powered mental health companion providing empathetic responses and personalized recommendations for anxiety, depression, and stress.",
     image: "/bot.png",
     tags: ["Python", "JavaScript", "TailwindCss", "Shell", "OpenAI", ],
     github: "https://github.com/Gauravthkaur/Mental-Health-bot",
-    demo: "https://mental-health-bot-two.vercel.app/"
+    demo: "https://mental-health-bot-tan.vercel.app/"
 },
 {
   id: "modern-responsive-site",
@@ -61,7 +53,17 @@ const projects = [
   tags: ["HTML", "CSS", "JavaScript"],
   github: "https://github.com/Gauravthkaur/Mordern_responsive_site",
   demo: "https://mordern-responsive-site.vercel.app/"
-}
+},
+
+{
+  id: "weather-dashboard",
+  title: "Weather Dashboard",
+  description: "An interactive weather dashboard with location-based forecasts.",
+  image: "/weather.png",
+  tags: ["JavaScript", "Chart.js", "Weather API", "CSS"],
+  github: "https://github.com/Gauravthkaur/weather_app",
+  demo: "https://weather-app-seven-psi-53.vercel.app/",
+},
   // Add more projects if needed
 ];
 

@@ -164,7 +164,7 @@ export default function Footer() {
 
         {/* Footer Bottom - Enhanced */}
         <div className="mt-12 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col items-center justify-center text-center">
             <p className="text-white/40 text-sm">
               © {currentYear}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300">
@@ -174,11 +174,7 @@ export default function Footer() {
             </p>
             
             {/* Additional Links - New Addition */}
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors">Privacy Policy</a>
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors">Terms of Use</a>
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors">Sitemap</a>
-            </div>
+          
           </div>
         </div>
       </div>
