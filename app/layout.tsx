@@ -15,19 +15,6 @@ export const metadata: Metadata = {
   icons: {
     icon: '/gaurav.png', // Example path, adjust if needed
   },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Dev-Gaurav",
-  },
-}
-
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1.0,
-  maximumScale: 5.0,
-  userScalable: true,
-  themeColor: "#030303"
 }
 
 export default function RootLayout({
@@ -38,27 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <head> is managed by Next.js Metadata API, no need for manual <head> tag here */}
-      <body className={cn("min-h-screen bg-background font-sans antialiased hardware-accelerated", fontSans.variable)}>
-        {/* Add a no-js class that gets removed by JavaScript to help with progressive enhancement */}
-        <script dangerouslySetInnerHTML={{ 
-          __html: `
-            (function() {
-              // Add polyfill for smooth scrolling for older browsers
-              if (!('scrollBehavior' in document.documentElement.style)) {
-                document.documentElement.classList.add('no-smooth-scroll');
-              }
-              
-              // Check for reduced motion preference
-              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.documentElement.classList.add('reduced-motion');
-              }
-              
-              // Remove no-js class
-              document.documentElement.classList.remove('no-js');
-            })();
-          `
-        }} />
-        
+      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>

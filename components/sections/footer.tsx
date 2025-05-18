@@ -3,15 +3,17 @@
 import { Github, Linkedin, Mail, Twitter, Download, Send } from "lucide-react"
 // Import the context hook
 import { useSmoothScrollContext } from "@/lib/smooth-scroll"
-import { useState } from "react"
+import { useState, useCallback, useRef } from "react"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
   const { scrollTo } = useSmoothScrollContext();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const animationFrameRef = useRef<number | null>(null);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  // Memoize the link click handler for better performance
+  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     // Use the scrollTo function from the context with custom options
     scrollTo(href, {
@@ -19,7 +21,7 @@ export default function Footer() {
       easing: (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, // Example: easeInOutCubic
       // You can experiment with other easing functions or durations
     });
-  }
+  }, [scrollTo])
 
   // Define email parameters
   const emailParams = {
@@ -31,15 +33,34 @@ export default function Footer() {
   // Create Gmail compose URL with parameters
   const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailParams.to}&su=${encodeURIComponent(emailParams.subject)}&body=${encodeURIComponent(emailParams.body)}`;
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  // Memoize the subscribe handler for better performance
+  const handleSubscribe = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send this to your API
     console.log("Subscribing email:", email);
     setSubscribed(true);
     setEmail("");
-    // Reset subscription status after 3 seconds
-    setTimeout(() => setSubscribed(false), 3000);
-  };
+    
+    // Reset subscription status after 3 seconds using requestAnimationFrame instead of setTimeout
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    
+    const startTime = performance.now();
+    const duration = 3000; // 3 seconds
+    
+    const resetSubscription = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      
+      if (elapsed >= duration) {
+        setSubscribed(false);
+      } else {
+        animationFrameRef.current = requestAnimationFrame(resetSubscription);
+      }
+    };
+    
+    animationFrameRef.current = requestAnimationFrame(resetSubscription);
+  }, [email]);
 
   return (
     <footer className="relative py-12 bg-[#030303] border-t border-white/10 relative overflow-hidden">
@@ -73,8 +94,9 @@ export default function Footer() {
                   />
                   <button
                     type="submit"
-                    className="bg-indigo-500 hover:bg-indigo-600 rounded-r-md px-3 transition-colors"
+                    className="bg-indigo-500 hover:bg-indigo-600 rounded-r-md px-3 transition-colors hardware-accelerated"
                     aria-label="Subscribe to newsletter"
+                    style={{ willChange: "transform, background-color" }}
                   >
                     <Send size={16} className="text-white" />
                   </button>
@@ -92,7 +114,8 @@ export default function Footer() {
                   <a
                     href={`#${link.toLowerCase()}`}
                     onClick={(e) => handleLinkClick(e, `#${link.toLowerCase()}`)} // This now uses the updated handler
-                    className="text-white/40 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-flex items-center group cursor-pointer"
+                    className="text-white/40 hover:text-white transition-colors duration-200 hover:translate-x-1 inline-flex items-center group cursor-pointer hardware-accelerated"
+                    style={{ willChange: "transform, color" }}
                   >
                     <span className="w-0 overflow-hidden transition-all duration-200 group-hover:w-2 group-hover:mr-1">
                       →
@@ -112,7 +135,8 @@ export default function Footer() {
                 href="https://github.com/Gauravthkaur"
                 target="_blank" // Add target blank for external links
                 rel="noopener noreferrer" // Add rel for security
-                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10"
+                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10 hardware-accelerated"
+                style={{ willChange: "transform, background-color, box-shadow" }}
                 aria-label="GitHub"
               >
                 <Github size={20} className="text-white" />
@@ -121,7 +145,8 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/gauravkumar-dev"
                 target="_blank" // Add target blank for external links
                 rel="noopener noreferrer" // Add rel for security
-                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10"
+                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10 hardware-accelerated"
+                style={{ willChange: "transform, background-color, box-shadow" }}
                 aria-label="LinkedIn"
               >
                 <Linkedin size={20} className="text-white" />
@@ -130,7 +155,8 @@ export default function Footer() {
                 href="https://x.com/gauravThakur_2"
                 target="_blank" // Add target blank for external links
                 rel="noopener noreferrer" // Add rel for security
-                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10"
+                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10 hardware-accelerated"
+                style={{ willChange: "transform, background-color, box-shadow" }}
                 aria-label="Twitter"
               >
                 <Twitter size={20} className="text-white" />
@@ -139,7 +165,8 @@ export default function Footer() {
                 href={mailtoLink} // Use the constructed Gmail link
                 target="_blank" // Open in a new tab
                 rel="noopener noreferrer" // Security best practice
-                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10"
+                className="bg-white/[0.03] hover:bg-white/[0.08] p-3 rounded-full transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/10 hardware-accelerated"
+                style={{ willChange: "transform, background-color, box-shadow" }}
                 aria-label="Email"
               >
                 <Mail size={20} className="text-white" />
@@ -152,7 +179,8 @@ export default function Footer() {
               <a
                 href="/Gaurav_Kumar_Resume.pdf" // Path relative to the public folder
                 download="Gaurav_Kumar_Resume.pdf" // Suggests the filename for download
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500/80 to-rose-500/80 text-white text-sm font-medium rounded-md shadow-md transition-all duration-300 ease-in-out hover:from-indigo-600 hover:to-rose-600 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-[#030303]"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500/80 to-rose-500/80 text-white text-sm font-medium rounded-md shadow-md transition-all duration-300 ease-in-out hover:from-indigo-600 hover:to-rose-600 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-[#030303] hardware-accelerated"
+                style={{ willChange: "transform, box-shadow" }}
               >
                 <Download size={16} /> {/* The Download icon is used here */}
                 Resume

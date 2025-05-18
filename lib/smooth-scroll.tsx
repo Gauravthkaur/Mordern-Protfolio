@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react" // Removed unused useRef
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react" // Added useMemo
 import Lenis from "@studio-freight/lenis"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -23,31 +23,42 @@ export const useSmoothScrollContext = () => {
 export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }) => {
   const [lenis, setLenis] = useState<Lenis | null>(null);
   const [browserSupported, setBrowserSupported] = useState<boolean>(true);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+
+  // Memoize browser compatibility check to avoid recalculations
+  const checkBrowserCompatibility = useCallback(() => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') return false;
+    
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Check for Safari and iOS devices which may need special handling
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    // Return true if browser supports smooth scrolling and user hasn't requested reduced motion
+    return !prefersReducedMotion;
+  }, []);
 
   useEffect(() => {
-    // Check for browser compatibility
-    const isBrowserCompatible = () => {
-      // Check if we're in a browser environment
-      if (typeof window === 'undefined') return false;
-      
-      // Check for reduced motion preference
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      // Return true if browser supports smooth scrolling and user hasn't requested reduced motion
-      return !prefersReducedMotion;
-    };
-
-    setBrowserSupported(isBrowserCompatible());
+    if (isInitialized) return; // Prevent multiple initializations
+    
+    const isCompatible = checkBrowserCompatibility();
+    setBrowserSupported(isCompatible);
 
     // Register GSAP ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
 
     // Only initialize Lenis if browser is compatible
-    if (!isBrowserCompatible()) {
+    if (!isCompatible) {
       console.log('Browser prefers reduced motion or doesn\'t support smooth scrolling. Using native scrolling.');
+      setIsInitialized(true);
       return;
     }
 
+    // Create Lenis instance with optimized settings
     const lenisInstance = new Lenis({
       duration: 1.2, // Slightly longer for smoother feel
       easing: (t) => 1 - Math.pow(1 - t, 3), // Cubic ease-out for smoother deceleration
@@ -62,79 +73,151 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
 
     // Integrate Lenis with GSAP ScrollTrigger
     lenisInstance.on('scroll', ScrollTrigger.update);
-
-    gsap.ticker.add((time) => {
+    
+    // Use a more efficient animation frame handling with GSAP ticker
+    const rafCallback = (time: number) => {
       // Multiply time by 1000 to convert seconds to milliseconds
       lenisInstance.raf(time * 1000);
-    });
-
-    gsap.ticker.lagSmoothing(0); // Disable lag smoothing
+    };
+    
+    gsap.ticker.add(rafCallback);
+    gsap.ticker.lagSmoothing(0); // Disable lag smoothing for more consistent performance
 
     setLenis(lenisInstance);
+    setIsInitialized(true);
 
     // Removed commented-out requestAnimationFrame logic
 
-    // Cleanup function
+    // Cleanup function with proper resource management
     return () => {
-      // Removed commented-out cancelAnimationFrame logic
-      gsap.ticker.remove(lenisInstance.raf); // Remove from GSAP ticker
+      gsap.ticker.remove(rafCallback); // Remove from GSAP ticker using the reference
       lenisInstance.destroy();
       setLenis(null);
-      // Optional: Kill all ScrollTriggers if they are only used with Lenis
-      // ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      setIsInitialized(false);
+      
+      // Clean up all ScrollTriggers to prevent memory leaks
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
+  // Optimized scrollTo function with better error handling and performance
   const scrollTo = useCallback((target: string | number | HTMLElement, options?: any) => {
+    // Early return if neither lenis nor window is available
+    if (!lenis && typeof window === 'undefined') return;
+    
     if (lenis) {
+      // Use Lenis for smooth scrolling when available
       lenis.scrollTo(target, {
         offset: -100, // Default offset, can be overridden by options
         duration: 1.0, // Default duration
         ...options, // Allow overriding defaults
       });
-    } else if (!browserSupported && typeof window !== 'undefined') {
+    } else if (typeof window !== 'undefined') {
       // Fallback for browsers without smooth scrolling support
       try {
         let targetElement: Element | null = null;
+        let targetPosition: number = 0;
         
         if (typeof target === 'string') {
           // If target is a selector
           targetElement = document.querySelector(target);
+          if (!targetElement) throw new Error(`Element not found: ${target}`);
         } else if (target instanceof HTMLElement) {
           // If target is an HTML element
           targetElement = target;
+        } else if (typeof target === 'number') {
+          // If target is a number (position)
+          targetPosition = target;
+          targetElement = null;
+        } else {
+          throw new Error('Invalid target type');
         }
         
+        const offsetY = options?.offset || -100;
+        
         if (targetElement) {
-          const offsetY = options?.offset || -100;
-          const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY + offsetY;
-          
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'auto'
-          });
+          targetPosition = targetElement.getBoundingClientRect().top + window.scrollY + offsetY;
         }
+        
+        // Use requestAnimationFrame for smoother scrolling even in fallback mode
+        const startPosition = window.scrollY;
+        const distance = targetPosition - startPosition;
+        const duration = options?.duration || 1.0;
+        const startTime = performance.now();
+        
+        const animateScroll = (currentTime: number) => {
+          const elapsed = (currentTime - startTime) / 1000; // Convert to seconds
+          const progress = Math.min(elapsed / duration, 1);
+          
+          // Use the same easing function as Lenis for consistency
+          const easedProgress = 1 - Math.pow(1 - progress, 3);
+          
+          window.scrollTo(0, startPosition + distance * easedProgress);
+          
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+          }
+        };
+        
+        requestAnimationFrame(animateScroll);
       } catch (error) {
         console.error('Error in fallback scrollTo:', error);
       }
     }
-  }, [lenis, browserSupported]);
-
-  // Add window resize handler
-  useEffect(() => {
-    const handleResize = () => {
-      if (lenis) {
-        lenis.resize();
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, [lenis]);
 
+  // Optimized window resize handler with debounce
+  useEffect(() => {
+    if (!lenis) return;
+    
+    let resizeTimeout: number | null = null;
+    
+    const handleResize = () => {
+      // Debounce resize events for better performance
+      if (resizeTimeout) {
+        window.cancelAnimationFrame(resizeTimeout);
+      }
+      
+      resizeTimeout = window.requestAnimationFrame(() => {
+        if (lenis) {
+          lenis.resize();
+        }
+      });
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeTimeout) {
+        window.cancelAnimationFrame(resizeTimeout);
+      }
+    };
+  }, [lenis]);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({ 
+    lenis, 
+    scrollTo 
+  }), [lenis, scrollTo]);
+  
+  // Memoize the class names for better performance
+  const contentClassName = useMemo(() => {
+    const classes = ['scroll-content'];
+    
+    if (browserSupported) {
+      classes.push('scroll-optimize', 'hardware-accelerated');
+    }
+    
+    return classes.join(' ');
+  }, [browserSupported]);
+
   return (
-    <SmoothScrollContext.Provider value={{ lenis, scrollTo }}>
-      <div className={`scroll-content ${browserSupported ? 'scroll-optimize hardware-accelerated' : ''}`}>
+    <SmoothScrollContext.Provider value={contextValue}>
+      <div 
+        className={contentClassName}
+        style={{ willChange: browserSupported ? 'transform' : 'auto' }}
+      >
         {children}
       </div>
     </SmoothScrollContext.Provider>

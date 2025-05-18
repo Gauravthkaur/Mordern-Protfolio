@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { Pacifico } from "next/font/google"
 import { cn } from "@/lib/utils"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useMemo, useCallback } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
@@ -47,6 +47,9 @@ function ElegantShape({
         opacity: { duration: 1.2 },
       }}
       className={cn("absolute", className)}
+      style={{
+        willChange: "transform, opacity",
+      }}
     >
       <motion.div
         animate={{
@@ -60,8 +63,9 @@ function ElegantShape({
         style={{
           width,
           height,
+          willChange: "transform",
         }}
-        className="relative"
+        className="relative hardware-accelerated"
       >
         <div
           className={cn(
@@ -82,6 +86,43 @@ function ElegantShape({
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const animationFrameRef = useRef<number | null>(null)
+
+  // Memoize the scroll handler for better performance
+  const handleSmoothScroll = useCallback((e: Event) => {
+    e.preventDefault()
+    const target = document.querySelector("#skills")
+    if (!target) return
+    
+    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset
+    let startPosition = window.pageYOffset
+    let startTime: number | null = null
+    const duration = 800 // ms
+    
+    // Use requestAnimationFrame for smoother animation
+    const animateScroll = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime
+      const timeElapsed = currentTime - startTime
+      const progress = Math.min(timeElapsed / duration, 1)
+      
+      // Easing function: easeInOutCubic
+      const easeProgress = progress < 0.5 
+        ? 4 * progress * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2
+      
+      window.scrollTo(0, startPosition + (targetPosition - startPosition) * easeProgress)
+      
+      if (progress < 1) {
+        animationFrameRef.current = requestAnimationFrame(animateScroll)
+      }
+    }
+    
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current)
+    }
+    
+    animationFrameRef.current = requestAnimationFrame(animateScroll)
+  }, [])
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -105,24 +146,23 @@ export default function Hero() {
     // Add a smooth scroll transition between sections
     const smoothScroll = document.querySelector('a[href="#skills"]')
     if (smoothScroll) {
-      smoothScroll.addEventListener("click", (e) => {
-        e.preventDefault()
-        const target = document.querySelector("#skills")
-        if (target) {
-          window.scrollTo({
-            top: target.getBoundingClientRect().top + window.pageYOffset,
-            behavior: "smooth",
-          })
-        }
-      })
+      smoothScroll.addEventListener("click", handleSmoothScroll)
     }
 
     return () => {
+      // Clean up all animations and event listeners
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+      if (smoothScroll) {
+        smoothScroll.removeEventListener("click", handleSmoothScroll)
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
     }
-  }, [])
+  }, [handleSmoothScroll])
 
-  const fadeUpVariants = {
+  // Memoize animation variants to prevent unnecessary recalculations
+  const fadeUpVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 30 },
     visible: (i: number) => ({
       opacity: 1,
@@ -133,7 +173,7 @@ export default function Hero() {
         ease: [0.25, 0.4, 0.25, 1],
       },
     }),
-  }
+  }), [])
 
   return (
     <section
@@ -143,7 +183,7 @@ export default function Hero() {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
 
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden hardware-accelerated">
         <ElegantShape
           delay={0.3}
           width={600}
@@ -190,7 +230,7 @@ export default function Hero() {
         />
       </div>
 
-      <div ref={contentRef} className="relative z-10 container mx-auto px-4 md:px-6">
+      <div ref={contentRef} className="relative z-10 container mx-auto px-4 md:px-6" style={{ willChange: "transform, opacity" }}>
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             custom={0}
