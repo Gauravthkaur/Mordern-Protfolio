@@ -75,6 +75,18 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     }
   }, [lenis]);
 
+  // Add window resize handler
+  useEffect(() => {
+    const handleResize = () => {
+      if (lenis) {
+        lenis.resize();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [lenis]);
+
   return (
     <SmoothScrollContext.Provider value={{ lenis, scrollTo }}>
       <div className="scroll-content scroll-optimize">
