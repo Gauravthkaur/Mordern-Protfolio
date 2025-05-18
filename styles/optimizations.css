@@ -3,14 +3,21 @@
 /* Hardware acceleration for animations */
 .hardware-accelerated {
   transform: translateZ(0);
+  -webkit-transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 
 /* Smooth scrolling optimizations */
 .scroll-content {
   transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+  -webkit-transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
 }
 
 /* Optimize elements during scroll */
@@ -18,18 +25,24 @@
   contain: layout style paint;
   content-visibility: auto;
   contain-intrinsic-size: auto 500px;
+  /* Fallback for browsers that don't support content-visibility */
+  visibility: visible;
+  display: block;
 }
 
 /* Smooth reveal for scroll-triggered elements */
 .scroll-reveal {
   opacity: 0;
   transform: translateY(20px);
+  -webkit-transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-transition: opacity 0.6s ease-out, -webkit-transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+  -webkit-transform: translateY(0);
 }
 
 /* Debounce scroll animations */
@@ -79,6 +92,8 @@
     min-height: 44px;
     min-width: 44px;
     padding: 0.5rem;
+    touch-action: manipulation; /* Prevent delays on click */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on iOS */
   }
   
   /* Improve tap target spacing */

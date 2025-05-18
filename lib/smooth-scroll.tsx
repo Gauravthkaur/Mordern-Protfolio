@@ -22,11 +22,31 @@ export const useSmoothScrollContext = () => {
 
 export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }) => {
   const [lenis, setLenis] = useState<Lenis | null>(null);
-  // Removed unused reqIdRef
+  const [browserSupported, setBrowserSupported] = useState<boolean>(true);
 
   useEffect(() => {
+    // Check for browser compatibility
+    const isBrowserCompatible = () => {
+      // Check if we're in a browser environment
+      if (typeof window === 'undefined') return false;
+      
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Return true if browser supports smooth scrolling and user hasn't requested reduced motion
+      return !prefersReducedMotion;
+    };
+
+    setBrowserSupported(isBrowserCompatible());
+
     // Register GSAP ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
+
+    // Only initialize Lenis if browser is compatible
+    if (!isBrowserCompatible()) {
+      console.log('Browser prefers reduced motion or doesn\'t support smooth scrolling. Using native scrolling.');
+      return;
+    }
 
     const lenisInstance = new Lenis({
       duration: 1.2, // Slightly longer for smoother feel
@@ -72,8 +92,33 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
         duration: 1.0, // Default duration
         ...options, // Allow overriding defaults
       });
+    } else if (!browserSupported && typeof window !== 'undefined') {
+      // Fallback for browsers without smooth scrolling support
+      try {
+        let targetElement: Element | null = null;
+        
+        if (typeof target === 'string') {
+          // If target is a selector
+          targetElement = document.querySelector(target);
+        } else if (target instanceof HTMLElement) {
+          // If target is an HTML element
+          targetElement = target;
+        }
+        
+        if (targetElement) {
+          const offsetY = options?.offset || -100;
+          const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY + offsetY;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'auto'
+          });
+        }
+      } catch (error) {
+        console.error('Error in fallback scrollTo:', error);
+      }
     }
-  }, [lenis]);
+  }, [lenis, browserSupported]);
 
   // Add window resize handler
   useEffect(() => {
@@ -89,7 +134,7 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
 
   return (
     <SmoothScrollContext.Provider value={{ lenis, scrollTo }}>
-      <div className="scroll-content scroll-optimize">
+      <div className={`scroll-content ${browserSupported ? 'scroll-optimize hardware-accelerated' : ''}`}>
         {children}
       </div>
     </SmoothScrollContext.Provider>
