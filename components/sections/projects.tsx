@@ -8,6 +8,16 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 const projects = [
 
   {
+    id: "samagam-landing-page",
+    title: "Samagam Landing Page",
+    description: "A responsive landing page for Samagam with a visually appealing design.",
+    image: "/samagam.png",
+    tags: ["JavaScript", "CSS", "HTML"],
+    github: "https://github.com/Gauravthkaur/Samagam-LandingPage",
+    demo: "https://samagam.rifmjpru.com/"
+},
+
+  {
     id: "employee-management-system",
     title: "Employee Management System",
     description: "A web-based system for managing employee details, roles, and performance.",
@@ -15,6 +25,15 @@ const projects = [
     tags: ["React.js","JavaScript", "node.js", "TailwindCSS","express.js","mongodb","Rest API","JWT-Authentication"],
     github: "https://github.com/Gauravthkaur/Employee-Management-System",
     demo: "https://employee-management-system-theta-lac.vercel.app/"
+},
+{
+  id: "mental-health-bot",
+  title: "Mental Health Bot",
+  description: "AI-powered mental health companion providing empathetic responses and personalized recommendations for anxiety, depression, and stress.",
+  image: "/bot.png",
+  tags: ["Python", "JavaScript", "TailwindCss", "Shell", "OpenAI", ],
+  github: "https://github.com/Gauravthkaur/Mental-Health-bot",
+  demo: "https://mental-health-bot-two.vercel.app/"
 },
 
   {
@@ -35,24 +54,8 @@ const projects = [
     github: "https://github.com/Gauravthkaur/weather_app",
     demo: "https://weather-app-seven-psi-53.vercel.app/",
   },
-    {
-      id: "samagam-landing-page",
-      title: "Samagam Landing Page",
-      description: "A responsive landing page for Samagam with a visually appealing design.",
-      image: "/landing Page.png",
-      tags: ["JavaScript", "CSS", "HTML"],
-      github: "https://github.com/Gauravthkaur/Samagam-LandingPage",
-      demo: "https://samagam-landing-page.vercel.app/"
-  },
-  {
-    id: "mental-health-bot",
-    title: "Mental Health Bot",
-    description: "AI-powered mental health companion providing empathetic responses and personalized recommendations for anxiety, depression, and stress.",
-    image: "/bot.png",
-    tags: ["Python", "JavaScript", "TailwindCss", "Shell", "OpenAI", ],
-    github: "https://github.com/Gauravthkaur/Mental-Health-bot",
-    demo: "https://mental-health-bot-two.vercel.app/"
-},
+   
+  
 {
   id: "modern-responsive-site",
   title: "Modern Responsive Site",

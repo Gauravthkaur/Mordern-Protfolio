@@ -177,7 +177,7 @@ export default function Footer() {
             <div>
               
               <a
-                href="/Gaurav_Kumar_Resume.pdf" // Path relative to the public folder
+                href="/GAURAV KUMAR - Full Stack Developer Resume.pdf" // Path relative to the public folder
                 download="Gaurav_Kumar_Resume.pdf" // Suggests the filename for download
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500/80 to-rose-500/80 text-white text-sm font-medium rounded-md shadow-md transition-all duration-300 ease-in-out hover:from-indigo-600 hover:to-rose-600 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-[#030303] hardware-accelerated"
                 style={{ willChange: "transform, box-shadow" }}
@@ -192,7 +192,7 @@ export default function Footer() {
 
         {/* Footer Bottom - Enhanced */}
         <div className="mt-12 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-center items-center">
             <p className="text-white/40 text-sm">
               © {currentYear}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300">
@@ -202,11 +202,7 @@ export default function Footer() {
             </p>
             
             {/* Additional Links - New Addition */}
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors">Privacy Policy</a>
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors">Terms of Use</a>
-              <a href="#" className="text-white/40 hover:text-white text-sm transition-colors">Sitemap</a>
-            </div>
+            
           </div>
         </div>
       </div>
