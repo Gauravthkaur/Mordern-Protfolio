@@ -12,7 +12,7 @@ const projects = [
     title: "Samagam Landing Page",
     description: "A responsive landing page for Samagam with a visually appealing design.",
     image: "/samagam.png",
-    tags: ["JavaScript", "CSS", "HTML"],
+    tags: ["React.js", "TailwindCSS", "WCAG 2.1", "SEO","React Router"],
     github: "https://github.com/Gauravthkaur/Samagam-LandingPage",
     demo: "https://samagam.rifmjpru.com/"
 },
