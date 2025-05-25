@@ -33,7 +33,7 @@ const projects = [
   image: "/bot.png",
   tags: ["Python", "JavaScript", "TailwindCss", "Shell", "OpenAI", ],
   github: "https://github.com/Gauravthkaur/Mental-Health-bot",
-  demo: "https://mental-health-bot-two.vercel.app/"
+  demo: "https://mental-health-bot-tan.vercel.app"
 },
 
   {
