@@ -14,12 +14,12 @@ import {
   SiNextdotjs, 
   SiJavascript, 
   SiMongodb, 
-  SiGraphql,
+  SiTypescript,
   SiExpress,
   SiTailwindcss,
-  SiThreedotjs,
   SiJsonwebtokens,
-  SiFlutter
+  SiFlutter,
+  SiMysql
   
 } from "react-icons/si"
 
@@ -30,13 +30,13 @@ const skills = [
   { name: "JavaScript", icon: SiJavascript },
   { name: "Node.js", icon: FaNodeJs },
   { name: "MongoDB", icon: SiMongodb },
-  { name: "GraphQL", icon: SiGraphql },
   { name: "Express", icon: SiExpress },
   { name: "Tailwind CSS", icon: SiTailwindcss },
-  { name: "Three.js", icon: SiThreedotjs },
   { name: "Java", icon: FaJava },
   { name: "JWT", icon: SiJsonwebtokens },
   { name: "Flutter", icon: SiFlutter },
+  { name: "TypeScript", icon: SiTypescript },
+  { name: "MY SQL", icon : SiMysql },
 
 ]
 
