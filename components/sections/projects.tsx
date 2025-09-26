@@ -35,7 +35,16 @@ const projects = [
   github: "https://github.com/Gauravthkaur/Mental-Health-bot",
   demo: "https://mental-health-bot-tan.vercel.app"
 },
-
+ {
+    id: "Intelli_Graph",
+    title: "IntelliGraph",
+    description: "An intelligent AI-powered concept visualization tool that transforms text and code into interactive diagrams and flowcharts in real-time",
+    image: "/Visualizer.png",
+    tags: ["React", "TypeScript", "Gemini AI API", "ReactFlow", "Mermaid.js", "TailwindCSS", "Vite"],
+    github: "https://github.com/Gauravthkaur/AI-concept-visualizer-",
+    demo: "https://ai-concept-visualizer.vercel.app/",
+  },
+   
   {
     id: "User_Management_System",
     title: "Task Management App",
@@ -45,17 +54,6 @@ const projects = [
     github: "https://github.com/Gauravthkaur/User-Management-System",
     demo: "https://user-management-system-delta.vercel.app/",
   },
-  {
-    id: "weather-dashboard",
-    title: "Weather Dashboard",
-    description: "An interactive weather dashboard with location-based forecasts.",
-    image: "/weather.png",
-    tags: ["JavaScript", "Chart.js", "Weather API", "CSS"],
-    github: "https://github.com/Gauravthkaur/weather_app",
-    demo: "https://weather-app-seven-psi-53.vercel.app/",
-  },
-   
-  
 {
   id: "modern-responsive-site",
   title: "Modern Responsive Site",
